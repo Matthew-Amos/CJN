@@ -5,7 +5,7 @@ Compiles code cells from a Jupyter notebook into a single script.
 ## Installation
 
 This module is intended to be imported locally, so all you need to do is save
-_[CJN.py](./CJN.py)_ to your project directory, then imported via `import CJN`.
+_[CJN.py](./CJN.py)_ to your project directory then import it via `import CJN`.
 
 ## Usage
 
