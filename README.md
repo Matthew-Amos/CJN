@@ -5,7 +5,7 @@ Compiles code cells from a Jupyter notebook into a single script.
 ## Installation
 
 This module is intended to be imported locally, so all you need to do is save
-_CJN.py_ to your project directory, then imported via `import CJN`.
+_[CJN.py](./CJN.py)_ to your project directory, then imported via `import CJN`.
 
 ## Usage
 
@@ -31,14 +31,14 @@ compile_notebook(
 ```
 
 Compilation options currently include:
-- `'compiled_marked`: True|False` - only compiled cells annotated with `#%
+- `'compiled_marked': True|False` - only compiled cells annotated with `#%
   compile`.
 
 __Compile multiple notebooks with a compile script__
 
 Compile commands can be saved in a json encoding. The general form is:
 
-_compile.json_
+_[compile.json](./compile.json)_
 
 ```json
 {
