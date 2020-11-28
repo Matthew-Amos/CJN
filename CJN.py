@@ -11,22 +11,34 @@ def _clean_cell_head(cell):
 def _cell_can_compile(cell, opts):
     if not cell['cell_type']=='code':
         return False
+    if len(cell['source'])==0:
+        return False
     if _clean_cell_head(cell)=="#% IGNORE":
         return False
     if 'compile_marked' in opts:
         if opts['compile_marked']:
-            if _clean_cell_head(cell)=="#% COMPILE":
-                return True
-            else:
-                return False
+            return _clean_cell_head(cell)=="#% COMPILE"
     return True
 
 def compile_notebook(notebook, output, opts={}):
     nb = _read_json(notebook)
     code = ''
     
+    def build_exec_count_fn(opts):
+        if 'enforce_exec_count' in opts:
+            if opts['enforce_exec_count']:
+                return lambda c_p: (c_p[0]['execution_count'] > c_p[1], c_p[0]['execution_count'])
+        return lambda c_p: True, None
+    
+    exec_count_check = build_exec_count_fn(opts)
+    
+    p = 0
     for cell in nb['cells']:
         if _cell_can_compile(cell, opts):
+            contig, p = exec_count_check((cell, p))
+            if not contig:
+                raise Exception("Cell execution count was not contiguous.")
+            
             for i in range(len(cell['source'])):
                 line = cell['source'][i]
                 if i > 0 or line[0:2] != '#%':

@@ -33,6 +33,9 @@ compile_notebook(
 Compilation options currently include:
 - `'compiled_marked': True|False` - only compiled cells annotated with `#%
   compile`.
+- `'enforce_exec_count': True|False` - raise an exception if a compiled code
+  cell's execution count is not incrementally higher than the prior compiled
+cell.
 
 __Compile multiple notebooks with a compile script__
 
@@ -44,7 +47,7 @@ _[compile.json](./compile.json)_
 {
   "CJN.ipynb": {
     "output": "CJN.py",
-    "opts": { "compile_marked": true }
+    "opts": { "compile_marked": true, "enforce_exec_count": true }
   },
   "other.ipynb": {
     "output": "other.jl",
