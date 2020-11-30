@@ -1,5 +1,12 @@
 import json
 
+CJN_FLAG_PREFIX = "#%"
+CJN_FLAG_IGNORE = CJN_FLAG_PREFIX + " " + "IGNORE"
+CJN_FLAG_COMPILE = CJN_FLAG_PREFIX + " " + "COMPILE"
+
+CJN_OPT_COMPILE_MARKED = "compile_marked"
+CJN_OPT_ENFORCE_EXEC_COUNT = "enforce_exec_count"
+
 def _read_json(fpath):
     with open(fpath, 'r') as f:
         s = f.read()
@@ -13,11 +20,11 @@ def _cell_can_compile(cell, opts):
         return False
     if len(cell['source'])==0:
         return False
-    if _clean_cell_head(cell)=="#% IGNORE":
+    if _clean_cell_head(cell)==CJN_FLAG_IGNORE:
         return False
-    if 'compile_marked' in opts:
-        if opts['compile_marked']:
-            return _clean_cell_head(cell)=="#% COMPILE"
+    if CJN_OPT_COMPILE_MARKED in opts:
+        if opts[CJN_OPT_COMPILE_MARKED]:
+            return _clean_cell_head(cell)==CJN_FLAG_COMPILE
     return True
 
 def compile_notebook(notebook, output, opts={}):
@@ -25,8 +32,8 @@ def compile_notebook(notebook, output, opts={}):
     code = ''
     
     def build_exec_count_fn(opts):
-        if 'enforce_exec_count' in opts:
-            if opts['enforce_exec_count']:
+        if CJN_OPT_ENFORCE_EXEC_COUNT in opts:
+            if opts[CJN_OPT_ENFORCE_EXEC_COUNT]:
                 return lambda c_p: (c_p[0]['execution_count'] > c_p[1], c_p[0]['execution_count'])
         return lambda c_p: True, None
     
@@ -41,7 +48,7 @@ def compile_notebook(notebook, output, opts={}):
             
             for i in range(len(cell['source'])):
                 line = cell['source'][i]
-                if i > 0 or line[0:2] != '#%':
+                if i > 0 or line[0:2] != CJN_FLAG_PREFIX:
                     code += line
             code += '\n\n'
     
