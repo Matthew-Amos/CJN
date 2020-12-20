@@ -35,7 +35,7 @@ def compile_notebook(notebook, output, opts={}):
         if CJN_OPT_ENFORCE_EXEC_COUNT in opts:
             if opts[CJN_OPT_ENFORCE_EXEC_COUNT]:
                 return lambda c_p: (c_p[0]['execution_count'] > c_p[1], c_p[0]['execution_count'])
-        return lambda c_p: True, None
+        return lambda c_p: (True, None)
     
     exec_count_check = build_exec_count_fn(opts)
     
